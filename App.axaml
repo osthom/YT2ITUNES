@@ -1,0 +1,27 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YT2ITUNES.App"
+             xmlns:local="using:YT2ITUNES"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+    <Application.Styles>
+        <FluentTheme />
+        <Style Selector=":is(TemplatedControl)">
+            <Setter Property="FontFamily" Value="Krungthep"/>
+        </Style>
+        <StyleInclude Source="Styles/AppDefaultStyles.axaml"></StyleInclude>
+    </Application.Styles>
+
+    <Application.Resources>
+        <SolidColorBrush x:Key="PrimaryBackground">#dddddd</SolidColorBrush>
+        <SolidColorBrush x:Key="PlaylistButtonBackground">#fffdf2</SolidColorBrush>
+        <SolidColorBrush x:Key="PlaylistButtonPointerOver">#dedcd2</SolidColorBrush>
+        <SolidColorBrush x:Key="PlaylistButtonPressedForeground">#bebcb4</SolidColorBrush>
+        <FontFamily x:Key="Glass_TTYFont">/Assets/Fonts/Glass_TTY_VT220.ttf#Glass TTY VT220</FontFamily>
+    </Application.Resources>
+</Application>
