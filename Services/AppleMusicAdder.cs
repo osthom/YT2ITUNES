@@ -233,4 +233,57 @@ public class AppleMusicAdder
         await proc.WaitForExitAsync();
         int exitCode = proc.ExitCode;
     }
+
+    public static async Task DeletePlaylistFromMusic(PlaylistViewModel pl_vm){ 
+        
+        string delete_playlist_from_music = $"""
+                set playlistToDelete to "{pl_vm.Title}"
+                tell application "Music"
+                    set targetPlaylist to user playlist playlistToDelete
+                    set trackList to every track of targetPlaylist
+                    
+                    
+                    repeat with t in trackList
+                        set tName to name of t
+                        set trackInLibrary to (first track of library playlist 1 whose name is tName)
+                        
+                        set trackDiskLocation to location of trackInLibrary
+                        if trackDiskLocation is not missing value then
+                            
+                            set trackPath to POSIX path of (trackDiskLocation as text)
+                            delete trackInLibrary
+                            do shell script "rm -f " & quoted form of trackPath
+                            
+                        end if
+                        
+                    end repeat
+                    delete targetPlaylist
+                    
+                end tell
+            """;
+
+        ProcessStartInfo subprocess = new()
+        {
+            FileName = "osascript",
+            ArgumentList = { "-e", delete_playlist_from_music},
+            CreateNoWindow = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+        };
+        var proc = Process.Start(subprocess);
+        ArgumentNullException.ThrowIfNull(proc);
+
+        //Send Console Output to UI
+        var outputTask = Task.Run(async () =>
+        {
+            while (!proc.StandardOutput.EndOfStream)
+            {
+                var line = await proc.StandardOutput.ReadLineAsync();
+                Console.WriteLine(line);
+            }
+        });
+
+        await proc.WaitForExitAsync();
+        int exitCode = proc.ExitCode;
+    }
 }
