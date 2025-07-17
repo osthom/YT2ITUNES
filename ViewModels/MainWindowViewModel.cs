@@ -263,6 +263,28 @@ public partial  class MainWindowViewModel : ViewModelBase
         SetAlbumArt(pl);
     }
 
+    [RelayCommand]
+    public async Task DeleteThisPlaylist(PlaylistViewModel plvm)
+    {
+        await AppleMusicAdder.DeletePlaylistFromMusic(plvm);
+        System.IO.Directory.Delete(plvm.Mp3_path, true);
+        System.IO.File.Delete(plvm.Archive_path);
+        await DbConnection.DeletePlaylist(plvm.Id);
+
+        if (SearchResults.Contains(plvm))
+        {
+            SearchResults.Remove(plvm);
+        }
+        if (PlaylistViewModels.Contains(plvm))
+        {
+            PlaylistViewModels.Remove(plvm);
+        }
+
+        PlaylistSelected = false;
+        SelectedPlaylist = null;
+
+    }
+
     public void SetAlbumArt(PlaylistViewModel plvm)
     {
         string? first_song_path = getFirstSongPath(plvm);

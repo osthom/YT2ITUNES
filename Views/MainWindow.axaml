@@ -71,20 +71,22 @@
                         </StackPanel>
                     </Grid>
                         <Grid Row="2" ColumnDefinitions="Auto,Auto,Auto,Auto,Auto">
-                            <Button Grid.Column="0" Classes="PlaylistViewButton" Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CheckPlaylist}"
+                            <Button Grid.Column="0" Classes="PlaylistViewButtonCheck" Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).CheckPlaylist}"
                                     CommandParameter="{Binding .}"
                                     >
                             Check For Updates</Button>
                             <Button Grid.Column="1"   
-                                    Classes="PlaylistViewButton" 
+                                    Classes="PlaylistViewButtonDownload" 
                                     Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).DownloadAndAddPlaylist}"
                                     CommandParameter="{Binding .}"> 
                                 Download</Button>
-                            <Button Grid.Column="2" Classes="PlaylistViewButton"  Content="Delete"></Button>
-                            <Button Grid.Column="3" Classes="PlaylistViewButton"   Content="Show in Finder"
+                            <Button Grid.Column="2" Classes="PlaylistViewButton"  Content="Delete"
+                                    Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).DeleteThisPlaylist}"
+                                    CommandParameter="{Binding .}"></Button>
+                            <Button Grid.Column="3" Classes="PlaylistViewButtonFinder"   Content="Show in Finder"
                                     Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).OpenSelectedPlaylistFinder}"
                                     CommandParameter="{Binding .}"></Button>
-                            <Button Grid.Column="4" Classes="PlaylistViewButton"   Content="Show in Music"
+                            <Button Grid.Column="4" Classes="PlaylistViewButtonMusic"   Content="Show in Music"
                                     Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).OpenSelectedPlaylistMusic}"
                                     CommandParameter="{Binding .}"></Button>
                         </Grid>
