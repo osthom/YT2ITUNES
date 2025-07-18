@@ -1,0 +1,104 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:YT2ITUNES.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="YT2ITUNES.Views.HomePageView"
+        x:DataType="vm:HomePageViewModel"
+        >
+    <Grid Background="{DynamicResource ResourceKey=PrimaryBackground}" ColumnDefinitions="500,*">
+        <Grid Margin="5" Column="0" RowDefinitions="Auto,Auto,Auto,*"
+            x:Name="Root">
+            <Border Grid.Row="0"> 
+                <Grid ColumnDefinitions = "*,Auto"> 
+                    <TextBox Grid.Column="0" Text="{Binding UrlToAdd}">
+                        <TextBox.InnerRightContent>
+                            <Button Command="{Binding NewPlaylistCheck}">
+                            Check
+                            </Button>
+                        </TextBox.InnerRightContent>
+                        <TextBox.KeyBindings>
+                            <KeyBinding Command="{Binding NewPlaylistCheck}" Gesture="Enter"/>
+                        </TextBox.KeyBindings>
+                    </TextBox>
+                    <Button Grid.Column="1" Command="{Binding DownloadAndAddNewPlaylist}" IsVisible="{Binding NewDownloadAllowed}">
+                    Download!
+                    </Button>
+                </Grid>
+            </Border>
+            <Border Grid.Row="1">
+                <Grid ColumnDefinitions="Auto,*">
+                    <TextBlock Grid.Column="0">Search</TextBlock>
+                    <TextBox Grid.Column="1" Text="{Binding PlaylistSearchText, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                </Grid>
+            </Border>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" >
+                <Button Command="{Binding GetPlaylistsFromDb}" >Get All Playlists</Button>
+                <Button Command="{Binding GetPlaylistsFromDbAlphabetically}" >Alphabetical</Button>
+                <Button Command="{Binding GetPlaylistsFromDbRecent}" >Recently Added</Button>
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="3">
+                <ItemsControl ItemsSource="{Binding SearchResults}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="vm:PlaylistViewModel">
+                                <Button x:Name="PlaylistSelectorButton"  
+                                                        Command="{Binding #Root.((vm:HomePageViewModel)DataContext).SelectThisPlaylist}"
+                                                        CommandParameter="{Binding .}">
+
+                                    <TextBlock x:Name="PlaylistSelectorText" Text="{Binding Title}"></TextBlock>
+                                </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <Grid Column="1" RowDefinitions="*,*" >
+            <Border Grid.Row="0" x:Name="PlaylistViewBorder" >
+                <Grid Margin="5" RowDefinitions="Auto,*,Auto" IsVisible="{Binding #Root.((vm:HomePageViewModel)DataContext).PlaylistSelected}" DataContext="{Binding SelectedPlaylist}">
+
+                    <TextBlock x:Name="PlaylistViewTitle" Grid.Row="0" Text="{Binding Title}"> </TextBlock>
+
+                    <Grid Row="1" ColumnDefinitions="Auto,*">
+                        <Image x:Name="PlaylistArt" Grid.Column="0" Source="{Binding #Root.((vm:HomePageViewModel)DataContext).AlbumArt}" Width="300"/>
+                        <StackPanel Grid.Column="1"  Orientation="Horizontal">
+                            <TextBlock Classes="PlaylistViewProperties" Text="{Binding Count, StringFormat='Count : {0} Songs'}"></TextBlock>
+                        </StackPanel>
+                    </Grid>
+                        <Grid Row="2" ColumnDefinitions="Auto,Auto,Auto,Auto,Auto">
+                            <Button Grid.Column="0" Classes="PlaylistViewButtonCheck" Command="{Binding #Root.((vm:HomePageViewModel)DataContext).CheckPlaylist}"
+                                    CommandParameter="{Binding .}"
+                                    >
+                            Check For Updates</Button>
+                            <Button Grid.Column="1"   
+                                    Classes="PlaylistViewButtonDownload" 
+                                    Command="{Binding #Root.((vm:HomePageViewModel)DataContext).DownloadAndAddPlaylist}"
+                                    CommandParameter="{Binding .}"> 
+                                Download</Button>
+                            <Button Grid.Column="2" Classes="PlaylistViewButton"  Content="Delete"
+                                    Command="{Binding #Root.((vm:HomePageViewModel)DataContext).DeleteThisPlaylist}"
+                                    CommandParameter="{Binding .}"></Button>
+                            <Button Grid.Column="3" Classes="PlaylistViewButtonFinder"   Content="Show in Finder"
+                                    Command="{Binding #Root.((vm:HomePageViewModel)DataContext).OpenSelectedPlaylistFinder}"
+                                    CommandParameter="{Binding .}"></Button>
+                            <Button Grid.Column="4" Classes="PlaylistViewButtonMusic"   Content="Show in Music"
+                                    Command="{Binding #Root.((vm:HomePageViewModel)DataContext).OpenSelectedPlaylistMusic}"
+                                    CommandParameter="{Binding .}"></Button>
+                        </Grid>
+                </Grid>
+            </Border>
+            <Border Grid.Row="1" x:Name="ConsoleBorder">
+                <Grid RowDefinitions="Auto,*">
+                    <TextBlock Grid.Row="0" x:Name="ConsoleHeader" Text="APPLICATION LOGS"></TextBlock>
+                    <ScrollViewer Grid.Row="1" x:Name="ConsoleScrollViewer">
+                            <TextBlock x:Name="ConsoleTextBlock" Text="{Binding ConsoleOutput}">
+                            </TextBlock>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+
+
+</UserControl>

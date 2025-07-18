@@ -1,21 +1,16 @@
 using Avalonia.Controls;
+using System;
 using YT2ITUNES.ViewModels;
 
 namespace YT2ITUNES.Views;
 
 public partial class MainWindow : Window
 {
-    private ScrollViewer consoleScrollViewer;
     public MainWindow()
     {
         InitializeComponent();
-        DataContext = new MainWindowViewModel(this);
-        consoleScrollViewer = this.FindControl<ScrollViewer>("ConsoleScrollViewer");
+        DataContext = new NavigatorViewModel();
     }
 
-    public void ScrollConsoleToEnd()
-    {
-        consoleScrollViewer.ScrollToEnd();
-    }
 
 }
