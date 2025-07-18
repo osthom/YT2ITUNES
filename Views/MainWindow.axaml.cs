@@ -9,7 +9,6 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        DataContext = new MainWindowViewModel(this);
         consoleScrollViewer = this.FindControl<ScrollViewer>("ConsoleScrollViewer");
     }
 

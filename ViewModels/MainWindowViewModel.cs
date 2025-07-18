@@ -18,6 +18,7 @@ using System.Threading;
 using TagLib;
 using Avalonia.Media.Imaging;
 using System.Collections.Specialized;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace YT2ITUNES.ViewModels;
 
@@ -43,6 +44,7 @@ public partial  class MainWindowViewModel : ViewModelBase
         _window = window;
         Console.SetOut(new ConsoleRedirect(AppendToConsoleOutput));
     }
+
 
 
     [ObservableProperty]
@@ -284,6 +286,7 @@ public partial  class MainWindowViewModel : ViewModelBase
         SelectedPlaylist = null;
 
     }
+
 
     public void SetAlbumArt(PlaylistViewModel plvm)
     {
