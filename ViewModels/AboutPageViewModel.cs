@@ -5,8 +5,8 @@ using CommunityToolkit.Mvvm.Input;
 namespace YT2ITUNES.ViewModels;
 
 
-public partial class SettingsPageViewModel : ViewModelBase
+public partial class AboutPageViewModel : ViewModelBase
 {
 
-    public string Title { get; } = "Settings Page";
+    public string Title { get; } = "About Page";
 }

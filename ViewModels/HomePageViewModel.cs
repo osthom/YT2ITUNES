@@ -23,24 +23,20 @@ using System.Collections.Specialized;
 
 namespace YT2ITUNES.ViewModels;
 
-public partial class HomePageViewModel : ObservableObject
+public partial class HomePageViewModel : ViewModelBase
 {
-    private readonly NavigatorViewModel _navigator;
 
-    public HomePageViewModel(NavigatorViewModel nv)
+    public HomePageViewModel()
     {
-        _navigator = nv;
-        //_window = window;
         Console.SetOut(new ConsoleRedirect(AppendToConsoleOutput));
     }
 
-    [RelayCommand]
-    private void GoToSettings()
+    private Action? _scrollToEnd;
+
+    public void SetScrollToEndAction(Action scrollAction)
     {
-        _navigator.NavigateToSettings();
+        _scrollToEnd = scrollAction;
     }
-
-
     private StringBuilder _sb = new StringBuilder();
 
     private string _consoleOutput = "";
@@ -51,7 +47,7 @@ public partial class HomePageViewModel : ObservableObject
         {
             SetProperty(ref _consoleOutput, value);
             Thread.Sleep(10);
-            // Dispatcher.UIThread.InvokeAsync(_window.ScrollConsoleToEnd);
+            _scrollToEnd?.Invoke();
         }
     }
 
@@ -159,7 +155,6 @@ public partial class HomePageViewModel : ObservableObject
         }
         Console.WriteLine(SearchResults.Count);
         Console.WriteLine($"[DATABASE] {PlaylistViewModels.Count} Playlists Retrieved");
-
     }
 
     [RelayCommand]

@@ -4,14 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="YT2ITUNES.Views.SettingsPage"
-        x:DataType="vm:SettingsPageViewModel"
-        Height="750"
-        Width="1250"
+        x:Class="YT2ITUNES.Views.AboutPageView"
+        x:DataType="vm:AboutPageViewModel"
         >
     <StackPanel>
-        <TextBlock Text="Settings Page"/>
-        <Button Command="{Binding GoToHome}">Go back to home page</Button>
+        <TextBlock Text="{Binding Title}"/>
     </StackPanel>
 
 </UserControl>

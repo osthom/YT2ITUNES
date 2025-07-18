@@ -1,30 +1,40 @@
 
 
 using System;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using YT2ITUNES.Views;
 
 namespace YT2ITUNES.ViewModels;
 
-public partial class NavigatorViewModel : ObservableObject
+public partial class NavigatorViewModel : ViewModelBase 
 {
     private HomePageViewModel _homePage;
 
+    private ScrollViewer consoleScrollViewer;
 
     [ObservableProperty]
-    private ObservableObject currentPage;
+    private ViewModelBase _currentPage;
     public NavigatorViewModel()
     {
-        _homePage = new HomePageViewModel(this);
+        _homePage = new HomePageViewModel();
         CurrentPage = _homePage;
     }
 
-    public void NavigateToSettings()
+    [RelayCommand]
+    private void NavigateToSettings()
     {
-        CurrentPage = new SettingsPageViewModel(this);
+        CurrentPage = new SettingsPageViewModel();
+    }
+    [RelayCommand]
+    private void NavigateToAbout()
+    {
+        CurrentPage = new AboutPageViewModel();
     }
 
-    public void NavigateToMain()
+    [RelayCommand]
+    private void NavigateToMain()
     {
         CurrentPage = _homePage;
     }

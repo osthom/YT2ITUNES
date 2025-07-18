@@ -1,5 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:YT2ITUNES"
              xmlns:views="clr-namespace:YT2ITUNES.Views;assembly=YT2ITUNES"
              xmlns:vm="clr-namespace:YT2ITUNES.ViewModels;assembly=YT2ITUNES"
              x:Class="YT2ITUNES.App"
@@ -7,12 +8,7 @@
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
-        <DataTemplate DataType="{x:Type vm:HomePageViewModel}">
-            <views:HomePage/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:SettingsPageViewModel}">
-            <views:SettingsPage/>
-        </DataTemplate>
+        <local:ViewLocator/>
     </Application.DataTemplates>
   
     <Application.Styles>

@@ -4,16 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="YT2ITUNES.Views.HomePage"
+        x:Class="YT2ITUNES.Views.HomePageView"
         x:DataType="vm:HomePageViewModel"
-        Height="750"
-        Width="1250"
         >
     <Grid Background="{DynamicResource ResourceKey=PrimaryBackground}" ColumnDefinitions="500,*">
         <Grid Margin="5" Column="0" RowDefinitions="Auto,Auto,Auto,*"
             x:Name="Root">
             <Border Grid.Row="0"> 
-                <Grid ColumnDefinitions = "*,Auto,Auto"> 
+                <Grid ColumnDefinitions = "*,Auto"> 
                     <TextBox Grid.Column="0" Text="{Binding UrlToAdd}">
                         <TextBox.InnerRightContent>
                             <Button Command="{Binding NewPlaylistCheck}">
@@ -26,9 +24,6 @@
                     </TextBox>
                     <Button Grid.Column="1" Command="{Binding DownloadAndAddNewPlaylist}" IsVisible="{Binding NewDownloadAllowed}">
                     Download!
-                    </Button>
-                    <Button Grid.Column="2" Command="{Binding GoToSettings}">
-                    Settings!
                     </Button>
                 </Grid>
             </Border>
