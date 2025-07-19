@@ -7,8 +7,41 @@
         x:Class="YT2ITUNES.Views.SettingsPageView"
         x:DataType="vm:SettingsPageViewModel"
         >
-    <StackPanel>
-        <TextBlock Text="{Binding Title}"/>
-    </StackPanel>
 
+        <Grid RowDefinitions="Auto,*">
+            <TextBlock Grid.Row="0" FontSize="24" Text="SETTINGS"></TextBlock>
+            <StackPanel Grid.Row="1">
+                <Grid ColumnDefinitions="Auto, *">
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Quality, StringFormat='Audio Quality : {0}'}"/>
+                        <Slider Grid.Column="1"
+                                Minimum="0"
+                                Maximum="10"
+                                TickFrequency="1"
+                                IsSnapToTickEnabled="True"
+                                TickPlacement="BottomRight"
+                                Value="{Binding Quality}"/>
+                </Grid>
+                <TextBlock Text="0 is the highest quality, 10 is the lowest. Don't ask why, I don't make the rules."/>
+
+                <Grid ColumnDefinitions="Auto, *">
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding RateLimit, StringFormat='Maximum Download Speed {0} Mb/s'}"/>
+                        <Slider Grid.Column="1"
+                                Minimum="1"
+                                Maximum="20"
+                                TickFrequency="1"
+                                IsSnapToTickEnabled="True"
+                                Value="{Binding RateLimit}"/>
+                </Grid>
+                <TextBlock TextWrapping="Wrap" Text="Maximum Download Speed is the maximum speed yt-dlp will attempt to download a video. The reason you don't just set it maximum speed is so Youtube won't throttle you. Youtube doesn't publish the throttling threshold but from experience downloading 10+ videos in a day at 20 Mbps is enough to do it, and from then on videos download at 50 kbps"/>
+                        
+               <Grid ColumnDefinitions="Auto, Auto"> 
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Embed thumbnails in file : "/>
+                        <CheckBox Grid.Column="1" IsChecked="{Binding EmbedThumbnail}"/>
+                </Grid>
+                <TextBlock Grid.Column="0" />
+                <Button HorizontalAlignment="Left" Grid.Column="1"
+                        Command="{Binding SaveCurrentSettings}">
+                    Save Settings</Button>
+            </StackPanel>
+        </Grid>
 </UserControl>
