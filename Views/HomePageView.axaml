@@ -8,10 +8,10 @@
         x:DataType="vm:HomePageViewModel"
         >
     <Grid Background="{DynamicResource ResourceKey=PrimaryBackground}" ColumnDefinitions="500,*">
-        <Grid Margin="5" Column="0" RowDefinitions="Auto,Auto,Auto,*"
+        <Grid Margin="5" Column="0" RowDefinitions="Auto,Auto,Auto,Auto,*"
             x:Name="Root">
             <Border Grid.Row="0"> 
-                <Grid ColumnDefinitions = "*,Auto"> 
+                <Grid ColumnDefinitions = "*"> 
                     <TextBox Grid.Column="0" Text="{Binding UrlToAdd}">
                         <TextBox.InnerRightContent>
                             <Button Command="{Binding NewPlaylistCheck}">
@@ -22,24 +22,35 @@
                             <KeyBinding Command="{Binding NewPlaylistCheck}" Gesture="Enter"/>
                         </TextBox.KeyBindings>
                     </TextBox>
-                    <Button Grid.Column="1" Command="{Binding DownloadAndAddNewPlaylist}" IsVisible="{Binding NewDownloadAllowed}">
-                    Download!
-                    </Button>
                 </Grid>
             </Border>
             <Border Grid.Row="1">
+                <Grid ColumnDefinitions="*,*">
+                    <Button Grid.Column="0" 
+                            x:Name="MainDownloadButton"
+                            IsEnabled="{Binding NewDownloadAllowed}"
+                            Command="{Binding DownloadAndAddNewPlaylist}">
+                            Download</Button>
+                    <Button Grid.Column="1"
+                            x:Name="DownloadAndForgetButton"
+                            IsEnabled="{Binding NewDownloadAllowed}"
+                            Command="{Binding DownloadAndForget}">
+                            Download and Forget</Button>
+                </Grid>
+            </Border>
+            <Border Grid.Row="2">
                 <Grid ColumnDefinitions="Auto,*">
                     <TextBlock Grid.Column="0">Search</TextBlock>
                     <TextBox Grid.Column="1" Text="{Binding PlaylistSearchText, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 </Grid>
             </Border>
-            <StackPanel Grid.Row="2" Orientation="Horizontal" >
+            <StackPanel Grid.Row="3" Orientation="Horizontal" >
                 <Button Command="{Binding GetPlaylistsFromDb}" >Get All Playlists</Button>
                 <Button Command="{Binding GetPlaylistsFromDbAlphabetically}" >Alphabetical</Button>
                 <Button Command="{Binding GetPlaylistsFromDbRecent}" >Recently Added</Button>
             </StackPanel>
 
-            <ScrollViewer Grid.Row="3">
+            <ScrollViewer Grid.Row="4">
                 <ItemsControl ItemsSource="{Binding SearchResults}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="vm:PlaylistViewModel">

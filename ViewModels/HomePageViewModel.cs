@@ -350,6 +350,46 @@ public partial class HomePageViewModel : ViewModelBase
 
     }
 
+    public async Task DownloadAndForget()
+    {
+        PlaylistUrl NewUrl = new PlaylistUrl(UrlToAdd, true);
+
+        (int, string playlist_title, DateTime) NewPlaylistInfo = await Downloader.GetPlaylistInfo(NewUrl);
+
+        List<PlaylistModel> playlists_from_db = await DbConnection.GetAllPlaylists();
+        foreach (PlaylistModel pl in playlists_from_db)
+        {
+            if (pl.Title == NewPlaylistInfo.playlist_title)
+            {
+                Console.WriteLine("Playlist with same title Already in System, go find it!");
+                return;
+            }
+        }
+        
+
+        int count = NewPlaylistInfo.Item1;
+        DateTime last_update = NewPlaylistInfo.Item3;
+        string mp3_path = $"/Users/{Environment.UserName}/music_library/" + NewPlaylistInfo.playlist_title;
+        string archive_path = $"/Users/{Environment.UserName}/.config/yt-dlp/" + NewPlaylistInfo.playlist_title + "_archive.txt";
+
+        int NewPlaylistId = await DbConnection.CreatePlaylist(NewPlaylistInfo.playlist_title, count, last_update, mp3_path, archive_path, NewUrl);
+        if (NewPlaylistId != -1)
+        {
+            PlaylistModel? plm_new = await DbConnection.GetPlaylist(NewPlaylistId);
+            if (plm_new != null)
+            {
+                Console.WriteLine("[Database] New Playlist added");
+                await Downloader.DownloadPlaylist(plm_new);
+                await AppleMusicAdder.AddToAppleMusic(plm_new);
+                await DbConnection.DeletePlaylist(plm_new.Id);
+
+                System.IO.File.Delete(plm_new.Archive_path);
+                Directory.Delete(plm_new.Mp3_path, true);
+            }
+        }
+
+    }
+
     public string? getFirstSongPath(PlaylistViewModel plvm)
     {
 

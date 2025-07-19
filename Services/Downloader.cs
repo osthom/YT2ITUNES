@@ -110,28 +110,27 @@ public class Downloader
         { 
             File.Create(pl.Archive_path).Close();
         }
-        //start the download
-
-        ProcessStartInfo subprocess = new()
-        {
-            FileName = "yt-dlp",
-            ArgumentList = { "--ignore-config", $"--download-archive \"{pl.Archive_path}\"", "-x", "-o \"~/music_library/%(playlist_title)s/%(title)s.%(ext)s\"", "--audio-format mp3", "--cookies-from-browser chrome", $"{pl.Url}" },
-            CreateNoWindow = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-        };
 
         SettingsModel currentSettings = new SettingsModel();
         int audioQuality = currentSettings.GetQuality();
         int limitRate = currentSettings.GetLimitRate();
         bool embed = currentSettings.GetThumbnail();
-
-        if (embed)
+        string embedString = "--embed-thumbnail";
+        if (embed == false)
         {
-            subprocess.ArgumentList.Add( "--embed-thumbnail");
+            embedString = "";
         }
-        subprocess.ArgumentList.Insert(2, $"--limit-rate {limitRate}.0m");
-        subprocess.ArgumentList.Insert(3, $"--audio-quality {audioQuality}");
+
+        ProcessStartInfo subprocess = new()
+        {
+            FileName = "yt-dlp",
+            Arguments = $"--ignore-config --download-archive \"{pl.Archive_path}\" {pl.Url} -x --audio-format mp3 -o \"~/music_library/%(playlist_title)s/%(title)s.%(ext)s\" --limit-rate {limitRate}.0m --cookies-from-browser chrome --audio-quality {audioQuality} {embedString}",
+            CreateNoWindow = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+        };
+
+        Console.WriteLine("Starting Subprocess");
 
         var proc = Process.Start(subprocess);
         ArgumentNullException.ThrowIfNull(proc);
