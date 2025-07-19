@@ -8,6 +8,7 @@ using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using YT2ITUNES.Models.Settings;
 
 
 namespace YT2ITUNES.Services;
@@ -47,15 +48,26 @@ public class Downloader
     public static async Task<string> DownloadPlaylist(PlaylistModel pl)
     {
         File.Create(pl.Archive_path).Close();
+        SettingsModel currentSettings = new SettingsModel();
+        int audioQuality = currentSettings.GetQuality();
+        int limitRate = currentSettings.GetLimitRate();
+        bool embed = currentSettings.GetThumbnail();
+        string embedString = "--embed-thumbnail";
+        if (embed == false)
+        {
+            embedString = "";
+        }
 
         ProcessStartInfo subprocess = new()
         {
             FileName = "yt-dlp",
-            Arguments = $"--ignore-config --download-archive \"{pl.Archive_path}\" {pl.Url} --embed-thumbnail -x --audio-format mp3 -o \"~/music_library/%(playlist_title)s/%(title)s.%(ext)s\" --limit-rate 5.0m --cookies-from-browser chrome ",
+            Arguments = $"--ignore-config --download-archive \"{pl.Archive_path}\" {pl.Url} -x --audio-format mp3 -o \"~/music_library/%(playlist_title)s/%(title)s.%(ext)s\" --limit-rate {limitRate}.0m --cookies-from-browser chrome --audio-quality {audioQuality} {embedString}",
             CreateNoWindow = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
         };
+
+        Console.WriteLine("Starting Subprocess");
         var proc = Process.Start(subprocess);
         ArgumentNullException.ThrowIfNull(proc);
 
@@ -70,13 +82,15 @@ public class Downloader
         });
 
         await proc.WaitForExitAsync();
-
+        Console.WriteLine("Finishing Subprocess");
 
         int exitCode = proc.ExitCode;
         string output = proc.StandardOutput.ReadToEnd();
 
         if (exitCode != 0)
         {
+            Console.WriteLine($"Error Code is {exitCode}");
+            Console.WriteLine("ERROR DOWNLOADING PLAYLIST : ABORTED");
             File.Delete(pl.Archive_path);
             Directory.Delete(pl.Mp3_path, true);
             return output;
@@ -98,13 +112,27 @@ public class Downloader
         }
         //start the download
 
-        ProcessStartInfo subprocess = new(){
+        ProcessStartInfo subprocess = new()
+        {
             FileName = "yt-dlp",
-            Arguments = $"--ignore-config --embed-thumbnail -x --audio-format mp3 -o \"~/music_library/%(playlist_title)s/%(title)s.%(ext)s\" --limit-rate 5.0m --cookies-from-browser chrome --download-archive \"{pl.Archive_path}\" {pl.Url}",
+            ArgumentList = { "--ignore-config", $"--download-archive \"{pl.Archive_path}\"", "-x", "-o \"~/music_library/%(playlist_title)s/%(title)s.%(ext)s\"", "--audio-format mp3", "--cookies-from-browser chrome", $"{pl.Url}" },
             CreateNoWindow = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
         };
+
+        SettingsModel currentSettings = new SettingsModel();
+        int audioQuality = currentSettings.GetQuality();
+        int limitRate = currentSettings.GetLimitRate();
+        bool embed = currentSettings.GetThumbnail();
+
+        if (embed)
+        {
+            subprocess.ArgumentList.Add( "--embed-thumbnail");
+        }
+        subprocess.ArgumentList.Insert(2, $"--limit-rate {limitRate}.0m");
+        subprocess.ArgumentList.Insert(3, $"--audio-quality {audioQuality}");
+
         var proc = Process.Start(subprocess);
         ArgumentNullException.ThrowIfNull(proc);
         //Send Console Output to UI

@@ -227,7 +227,6 @@ public partial class HomePageViewModel : ViewModelBase
         pl_vm.Last_update = PlaylistInfo.Item3;
 
         PlaylistModel plm = pl_vm.GetPlaylistModel();
-
         await Downloader.DownloadPlaylist(plm);
         await AppleMusicAdder.AddToAppleMusic(plm);
         await DbConnection.UpdatePlaylist(plm.Id, plm.Count, plm.Last_update);
