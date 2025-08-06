@@ -316,8 +316,9 @@ public partial class HomePageViewModel : ViewModelBase
         PlaylistUrl NewUrl = new PlaylistUrl(UrlToAdd, true);
 
         (int, string playlist_title, DateTime) NewPlaylistInfo = await Downloader.GetPlaylistInfo(NewUrl);
-
+        Console.WriteLine("Before Error");
         List<PlaylistModel> playlists_from_db = await DbConnection.GetAllPlaylists();
+        Console.WriteLine("After Error");
         foreach (PlaylistModel pl in playlists_from_db)
         {
             if (pl.Title == NewPlaylistInfo.playlist_title)
@@ -332,8 +333,9 @@ public partial class HomePageViewModel : ViewModelBase
         DateTime last_update = NewPlaylistInfo.Item3;
         string mp3_path = $"/Users/{Environment.UserName}/music_library/" + NewPlaylistInfo.playlist_title;
         string archive_path = $"/Users/{Environment.UserName}/.config/yt-dlp/" + NewPlaylistInfo.playlist_title + "_archive.txt";
-
+        Console.WriteLine("Before Create");
         int NewPlaylistId = await DbConnection.CreatePlaylist(NewPlaylistInfo.playlist_title, count, last_update, mp3_path, archive_path, NewUrl);
+        Console.WriteLine("After Create");
         if (NewPlaylistId != -1)
         {
             PlaylistModel? plm_new = await DbConnection.GetPlaylist(NewPlaylistId);
