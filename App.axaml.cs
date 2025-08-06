@@ -6,6 +6,7 @@ using System.Linq;
 using Avalonia.Markup.Xaml;
 using YT2ITUNES.ViewModels;
 using YT2ITUNES.Views;
+using YT2ITUNES.Services;
 
 namespace YT2ITUNES;
 
@@ -18,6 +19,7 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        DbConnection.OnStartupCall();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
