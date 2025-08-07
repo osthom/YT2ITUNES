@@ -10,6 +10,7 @@ using MySql.Data.MySqlClient.Authentication;
 using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
 using System.Data;
+using System.Linq;
 
 
 namespace YT2ITUNES.Services;
@@ -155,6 +156,85 @@ public class DbConnection
         return pl_List;
     }
 
+    public static void UpdateAllPlaylistPaths()
+    {
+        List<PlaylistModel> pl_List = new List<PlaylistModel>();
+        string connString = GetConnString();
+        SqliteConnection connection = new SqliteConnection(connString);
+
+        try
+        {
+            connection.Open();
+
+            SqliteCommand cmd = connection.CreateCommand();
+            cmd.CommandText =
+            @"
+                SELECT * FROM Playlists;
+                ";
+
+
+            var res = cmd.ExecuteReader();
+            SqliteDataReader reader = (SqliteDataReader)res;
+            while (reader.Read())
+            {
+                int new_id = System.Convert.ToInt32((long)reader["id"]);
+                int count = System.Convert.ToInt32((long)reader["count"]);
+                DateTime last_update = reader.GetDateTime("last_update");
+                string playlist_title = (string)reader["title"];
+                string mp3_path = (string)reader["mp3_path"];
+                string archive_path = (string)reader["archive_path"];
+                string url = (string)reader["url"];
+                PlaylistUrl link = new PlaylistUrl(url, true);
+                PlaylistModel toAdd = new PlaylistModel(count, last_update, new_id, playlist_title, mp3_path, archive_path, link);
+                pl_List.Add(toAdd);
+            }
+            reader.Close();
+            connection.Close();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        List<Tuple<int, string, string>> updateList = new List<Tuple<int, string, string>>();
+        foreach (var pl in pl_List)
+        {
+            string currentArchive = pl.Archive_path;
+            string archive_filename = currentArchive.Split('/').Last();
+
+            string currentMp3 = pl.Mp3_path;
+            string mp3_filename = currentMp3.Split('/').Last();
+
+            string new_mp3_path = $"/Users/{Environment.UserName}/Library/Application Support/YT2ITUNES/music/" + mp3_filename;
+            string new_archive_path = $"/Users/{Environment.UserName}/Library/Application Support/YT2ITUNES/archives/" + archive_filename;
+            Console.WriteLine($"{archive_filename}, {mp3_filename}");
+            updateList.Add(Tuple.Create(pl.Id, new_mp3_path, new_archive_path));
+        }
+        
+        foreach(var tup in updateList) {
+
+        try
+        {
+            connection.Open();
+
+            SqliteCommand cmd = connection.CreateCommand();
+            cmd.CommandText =
+            $@"
+            UPDATE Playlists
+            SET mp3_path = $MP3, archive_path = $Archive
+            WHERE id = $Id;
+            ";
+            cmd.Parameters.AddWithValue("$MP3", tup.Item2);
+            cmd.Parameters.AddWithValue("$Id", tup.Item1);
+            cmd.Parameters.AddWithValue("$Archive", tup.Item3);
+            cmd.ExecuteNonQuery();
+            connection.Close();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        }
+    }
     public static async Task<List<PlaylistModel>> GetAllPlaylistsAlphabetical()
     {
         List<PlaylistModel> pl_List = new List<PlaylistModel>();

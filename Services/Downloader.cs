@@ -61,7 +61,7 @@ public class Downloader
         ProcessStartInfo subprocess = new()
         {
             FileName = "yt-dlp",
-            Arguments = $"--ignore-config --download-archive \"{pl.Archive_path}\" {pl.Url} -x --audio-format mp3 -o \"~/music_library/%(playlist_title)s/%(title)s.%(ext)s\" --limit-rate {limitRate}.0m --cookies-from-browser chrome --audio-quality {audioQuality} {embedString}",
+            Arguments = $"--ignore-config --download-archive \"{pl.Archive_path}\" {pl.Url} -x --audio-format mp3 -o \"~/Library/Application Support/YT2ITUNES/music/%(playlist_title)s/%(title)s.%(ext)s\" --limit-rate {limitRate}.0m --cookies-from-browser chrome --audio-quality {audioQuality} {embedString}",
             CreateNoWindow = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -124,7 +124,7 @@ public class Downloader
         ProcessStartInfo subprocess = new()
         {
             FileName = "yt-dlp",
-            Arguments = $"--ignore-config --download-archive \"{pl.Archive_path}\" {pl.Url} -x --audio-format mp3 -o \"~/music_library/%(playlist_title)s/%(title)s.%(ext)s\" --limit-rate {limitRate}.0m --cookies-from-browser chrome --audio-quality {audioQuality} {embedString}",
+            Arguments = $"--ignore-config --download-archive \"{pl.Archive_path}\" {pl.Url} -x --audio-format mp3 -o \"~/Library/Application Support/YT2ITUNES/music/playlist_title)s/%(title)s.%(ext)s\" --limit-rate {limitRate}.0m --cookies-from-browser chrome --audio-quality {audioQuality} {embedString}",
             CreateNoWindow = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,

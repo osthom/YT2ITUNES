@@ -331,8 +331,8 @@ public partial class HomePageViewModel : ViewModelBase
 
         int count = NewPlaylistInfo.Item1;
         DateTime last_update = NewPlaylistInfo.Item3;
-        string mp3_path = $"/Users/{Environment.UserName}/music_library/" + NewPlaylistInfo.playlist_title;
-        string archive_path = $"/Users/{Environment.UserName}/.config/yt-dlp/" + NewPlaylistInfo.playlist_title + "_archive.txt";
+        string mp3_path = $"/Users/{Environment.UserName}/Library/Application Support/YT2ITUNES/music/" + NewPlaylistInfo.playlist_title;
+        string archive_path = $"/Users/{Environment.UserName}/Library/Application Support/YT2ITUNES/archives/" + NewPlaylistInfo.playlist_title + "_archive.txt";
         Console.WriteLine("Before Create");
         int NewPlaylistId = await DbConnection.CreatePlaylist(NewPlaylistInfo.playlist_title, count, last_update, mp3_path, archive_path, NewUrl);
         Console.WriteLine("After Create");
@@ -371,8 +371,8 @@ public partial class HomePageViewModel : ViewModelBase
 
         int count = NewPlaylistInfo.Item1;
         DateTime last_update = NewPlaylistInfo.Item3;
-        string mp3_path = $"/Users/{Environment.UserName}/music_library/" + NewPlaylistInfo.playlist_title;
-        string archive_path = $"/Users/{Environment.UserName}/.config/yt-dlp/" + NewPlaylistInfo.playlist_title + "_archive.txt";
+        string mp3_path = $"/Users/{Environment.UserName}/Library/Application Support/YT2ITUNES/music/" + NewPlaylistInfo.playlist_title;
+        string archive_path = $"/Users/{Environment.UserName}/Library/Application Support/YT2ITUNES/archives/" + NewPlaylistInfo.playlist_title + "_archive.txt";
 
         int NewPlaylistId = await DbConnection.CreatePlaylist(NewPlaylistInfo.playlist_title, count, last_update, mp3_path, archive_path, NewUrl);
         if (NewPlaylistId != -1)
