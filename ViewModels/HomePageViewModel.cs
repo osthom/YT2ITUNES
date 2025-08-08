@@ -316,9 +316,7 @@ public partial class HomePageViewModel : ViewModelBase
         PlaylistUrl NewUrl = new PlaylistUrl(UrlToAdd, true);
 
         (int, string playlist_title, DateTime) NewPlaylistInfo = await Downloader.GetPlaylistInfo(NewUrl);
-        Console.WriteLine("Before Error");
         List<PlaylistModel> playlists_from_db = await DbConnection.GetAllPlaylists();
-        Console.WriteLine("After Error");
         foreach (PlaylistModel pl in playlists_from_db)
         {
             if (pl.Title == NewPlaylistInfo.playlist_title)

@@ -21,6 +21,7 @@ public partial class App : Application
     {
         DbConnection.OnStartupCall();
         Startup.StartupFolderCheck();
+        Startup.YtDlpCheck();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 

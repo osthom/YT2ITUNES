@@ -3,7 +3,7 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Diagnostics;
-
+using YT2ITUNES.Services;
 
 namespace YT2ITUNES.Models.Playlists;
 
@@ -32,7 +32,7 @@ public class PlaylistUrl
     {
         ProcessStartInfo subprocess = new()
         {
-            FileName = "yt-dlp",
+            FileName = Startup.yt_dlp_path,
             Arguments = $" --ignore-config -J --write-info-json --playlist-items 0 {potential_url}",
             CreateNoWindow = true,
             RedirectStandardOutput = true,
