@@ -14,19 +14,21 @@ using YT2ITUNES.Models.Settings;
 namespace YT2ITUNES.Services;
 
 public class Downloader
-{
-    public static async Task<(int, string, DateTime)> GetPlaylistInfo(PlaylistUrl pl_url )
+{   
+
+    public static async Task<(int, string, DateTime)> GetPlaylistInfo(PlaylistUrl pl_url)
     {
+
+        string ffmpegLoc = Path.Combine(AppContext.BaseDirectory, "Resources");
         //(int,string) is count and title of the pl_url
         ProcessStartInfo subprocess = new()
         {
-            FileName = "yt-dlp",
-            Arguments = $" --ignore-config -J --write-info-json --playlist-items 0 {pl_url}",
+            FileName = Startup.yt_dlp_path,
+            Arguments = $" --ignore-config --ffmpeg-location \"{ffmpegLoc}\" -J --write-info-json --playlist-items 0 {pl_url}",
             CreateNoWindow = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
         };
-
         var proc = Process.Start(subprocess);
         ArgumentNullException.ThrowIfNull(proc);
         await proc.WaitForExitAsync();
@@ -37,13 +39,13 @@ public class Downloader
         int count = (int)parsedOutput.AsObject()["playlist_count"];
         //should be coming out as a string of numbers "yyyymmdd"
         string modified_date_string = (string)parsedOutput.AsObject()["modified_date"];
-        DateTime modified_date = DateTime.ParseExact(modified_date_string, "yyyyMMdd",CultureInfo.InvariantCulture);
+        DateTime modified_date = DateTime.ParseExact(modified_date_string, "yyyyMMdd", CultureInfo.InvariantCulture);
         Console.WriteLine($"[Url] Title is {title}");
         Console.WriteLine($"[Url] Count : {count}");
         Console.WriteLine($"[Url] Last Modified : {modified_date_string}");
 
         return (count, title, modified_date);
-        
+
     }
     public static async Task<string> DownloadPlaylist(PlaylistModel pl)
     {
@@ -58,10 +60,12 @@ public class Downloader
             embedString = "";
         }
 
+        string ffmpegLoc = Path.Combine(AppContext.BaseDirectory, "Resources");
+
         ProcessStartInfo subprocess = new()
         {
-            FileName = "yt-dlp",
-            Arguments = $"--ignore-config --download-archive \"{pl.Archive_path}\" {pl.Url} -x --audio-format mp3 -o \"~/Library/Application Support/YT2ITUNES/music/%(playlist_title)s/%(title)s.%(ext)s\" --limit-rate {limitRate}.0m --cookies-from-browser chrome --audio-quality {audioQuality} {embedString}",
+            FileName = Startup.yt_dlp_path,
+            Arguments = $"--ignore-config --ffmpeg-location \"{ffmpegLoc}\" --download-archive \"{pl.Archive_path}\" {pl.Url} -x --audio-format mp3 -o \"~/Library/Application Support/YT2ITUNES/music/%(playlist_title)s/%(title)s.%(ext)s\" --limit-rate {limitRate}.0m --cookies-from-browser chrome --audio-quality {audioQuality} {embedString}",
             CreateNoWindow = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -93,6 +97,7 @@ public class Downloader
             Console.WriteLine("ERROR DOWNLOADING PLAYLIST : ABORTED");
             File.Delete(pl.Archive_path);
             Directory.Delete(pl.Mp3_path, true);
+            Console.WriteLine(output);
             return output;
         }
         else
@@ -121,10 +126,12 @@ public class Downloader
             embedString = "";
         }
 
+        string ffmpegLoc = Path.Combine(AppContext.BaseDirectory, "Resources");
+
         ProcessStartInfo subprocess = new()
         {
-            FileName = "yt-dlp",
-            Arguments = $"--ignore-config --download-archive \"{pl.Archive_path}\" {pl.Url} -x --audio-format mp3 -o \"~/Library/Application Support/YT2ITUNES/music/playlist_title)s/%(title)s.%(ext)s\" --limit-rate {limitRate}.0m --cookies-from-browser chrome --audio-quality {audioQuality} {embedString}",
+            FileName = Startup.yt_dlp_path,
+            Arguments = $"--ignore-config --ffmpeg-location \"{ffmpegLoc}\" --download-archive \"{pl.Archive_path}\" {pl.Url} -x --audio-format mp3 -o \"~/Library/Application Support/YT2ITUNES/music/playlist_title)s/%(title)s.%(ext)s\" --limit-rate {limitRate}.0m --cookies-from-browser chrome --audio-quality {audioQuality} {embedString}",
             CreateNoWindow = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
