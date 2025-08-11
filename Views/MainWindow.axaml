@@ -12,12 +12,12 @@
         Width="1250"
         >
 
-    <Grid RowDefinitions="50,*">
-        <Grid Row="0" ColumnDefinitions="*,Auto,Auto,Auto">
-            <TextBlock Grid.Column="0" FontSize="20" Text="YT2ITUNES"/> 
-            <Button Grid.Column="1" Command="{Binding NavigateToMainCommand}">H</Button>
-            <Button Grid.Column="2" Command="{Binding NavigateToSettingsCommand}">S</Button>
-            <Button Grid.Column="3" Command="{Binding NavigateToAboutCommand}">A</Button>
+    <Grid  RowDefinitions="50,*">
+        <Grid  Background="{DynamicResource ResourceKey=PrimaryBackground}" Row="0" ColumnDefinitions="*,Auto,Auto,Auto">
+            <TextBlock Grid.Column="0" FontSize="40" Text="YT2ITUNES"/> 
+            <Button Grid.Column="1" Command="{Binding NavigateToMainCommand}">Home</Button>
+            <Button Grid.Column="2" Command="{Binding NavigateToSettingsCommand}">Settings</Button>
+            <Button Grid.Column="3" Command="{Binding NavigateToAboutCommand}">About / Help </Button>
         </Grid>
         <ContentControl Grid.Row="1" Content="{Binding CurrentPage}"/>
     </Grid>

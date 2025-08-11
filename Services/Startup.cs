@@ -34,7 +34,6 @@ public class Startup
         Process.Start("chmod", $"+x \"{ffmpegPath}\"")?.WaitForExit();
         Process.Start("chmod", $"+x \"{ffprobePath}\"")?.WaitForExit();
 
-        Console.WriteLine(System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture);
 
         ProcessStartInfo subprocess = new()
         {

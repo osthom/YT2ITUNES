@@ -34,17 +34,32 @@ public class Downloader
         await proc.WaitForExitAsync();
 
         string output = proc.StandardOutput.ReadToEnd();
-        JsonNode parsedOutput = JsonNode.Parse(output);
-        string title = parsedOutput.AsObject()["title"].ToString();
-        int count = (int)parsedOutput.AsObject()["playlist_count"];
+        JsonNode? parsedOutput = JsonNode.Parse(output);
+        string? title = parsedOutput?.AsObject()?["title"]?.ToString();
+        int? count = (int?)parsedOutput?.AsObject()?["playlist_count"];
         //should be coming out as a string of numbers "yyyymmdd"
-        string modified_date_string = (string)parsedOutput.AsObject()["modified_date"];
+        string? modified_date_string = (string?)parsedOutput?.AsObject()["modified_date"];
         DateTime modified_date = DateTime.ParseExact(modified_date_string, "yyyyMMdd", CultureInfo.InvariantCulture);
         Console.WriteLine($"[Url] Title is {title}");
         Console.WriteLine($"[Url] Count : {count}");
         Console.WriteLine($"[Url] Last Modified : {modified_date_string}");
 
-        return (count, title, modified_date);
+        int finalCount = -1;
+        if (count != null)
+        {
+            finalCount = (int)count;
+ 
+        }
+
+        string finalTitle = " ";
+        if (title != null)
+        {
+            finalTitle = (string)title;
+        }
+
+
+
+        return (finalCount, finalTitle, modified_date);
 
     }
     public static async Task<string> DownloadPlaylist(PlaylistModel pl)

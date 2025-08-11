@@ -73,11 +73,21 @@
 
                     <Grid Row="1" ColumnDefinitions="Auto,*">
                         <Image x:Name="PlaylistArt" Grid.Column="0" Source="{Binding #Root.((vm:HomePageViewModel)DataContext).AlbumArt}" Width="300"/>
-                        <StackPanel Grid.Column="1"  Orientation="Horizontal">
+                        <StackPanel Grid.Column="1"  Orientation="Vertical">
+                            <SelectableTextBlock  Text="{Binding Url}"></SelectableTextBlock>
                             <TextBlock Classes="PlaylistViewProperties" Text="{Binding Count, StringFormat='Count : {0} Songs'}"></TextBlock>
+                            <Button Command="{Binding #Root.((vm:HomePageViewModel)DataContext).DeleteButtonPrompt}"
+                            >Delete Playlist</Button>
+                            <Button IsVisible="{Binding #Root.((vm:HomePageViewModel)DataContext).ConfirmDelete}"
+                                    Command="{Binding #Root.((vm:HomePageViewModel)DataContext).DeleteThisPlaylist}"
+                                    CommandParameter="{Binding .}"
+                            >Yes, Delete!</Button>
+                            <Button IsVisible="{Binding #Root.((vm:HomePageViewModel)DataContext).ConfirmDelete}"
+                                    Command="{Binding #Root.((vm:HomePageViewModel)DataContext).CancelDeleteButtonPrompt}"
+                            >Cancel</Button>
                         </StackPanel>
                     </Grid>
-                        <Grid Row="2" ColumnDefinitions="Auto,Auto,Auto,Auto,Auto">
+                        <Grid Row="2" ColumnDefinitions="Auto,Auto,Auto,Auto">
                             <Button Grid.Column="0" Classes="PlaylistViewButtonCheck" Command="{Binding #Root.((vm:HomePageViewModel)DataContext).CheckPlaylist}"
                                     CommandParameter="{Binding .}"
                                     >
@@ -87,13 +97,10 @@
                                     Command="{Binding #Root.((vm:HomePageViewModel)DataContext).DownloadAndAddPlaylist}"
                                     CommandParameter="{Binding .}"> 
                                 Download</Button>
-                            <Button Grid.Column="2" Classes="PlaylistViewButton"  Content="Delete"
-                                    Command="{Binding #Root.((vm:HomePageViewModel)DataContext).DeleteThisPlaylist}"
-                                    CommandParameter="{Binding .}"></Button>
-                            <Button Grid.Column="3" Classes="PlaylistViewButtonFinder"   Content="Show in Finder"
+                            <Button Grid.Column="2" Classes="PlaylistViewButtonFinder"   Content="Show in Finder"
                                     Command="{Binding #Root.((vm:HomePageViewModel)DataContext).OpenSelectedPlaylistFinder}"
                                     CommandParameter="{Binding .}"></Button>
-                            <Button Grid.Column="4" Classes="PlaylistViewButtonMusic"   Content="Show in Music"
+                            <Button Grid.Column="3" Classes="PlaylistViewButtonMusic"   Content="Show in Music"
                                     Command="{Binding #Root.((vm:HomePageViewModel)DataContext).OpenSelectedPlaylistMusic}"
                                     CommandParameter="{Binding .}"></Button>
                         </Grid>

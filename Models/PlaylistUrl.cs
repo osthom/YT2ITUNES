@@ -41,13 +41,13 @@ public class PlaylistUrl
         var proc = Process.Start(subprocess);
         ArgumentNullException.ThrowIfNull(proc);
         string output = proc.StandardOutput.ReadToEnd();
-        JsonNode parsedOutput = JsonNode.Parse(output);
+        JsonNode? parsedOutput = JsonNode.Parse(output);
 
         if (parsedOutput is System.Text.Json.Nodes.JsonObject)
         {
             if (parsedOutput.AsObject().ContainsKey("_type"))
             {
-                string parsedType = parsedOutput.AsObject()["_type"].ToString();
+                string? parsedType = parsedOutput?.AsObject()?["_type"]?.ToString();
 
                 if (parsedType == "playlist")
                 {
@@ -71,12 +71,12 @@ public class PlaylistUrl
 
     public static bool TryParse(string candidate_url, out PlaylistUrl playlist_url){
 
-        playlist_url = null;
         if(IsValid(candidate_url)){
             //using override because we just validated the URL, no need to duplicate work with the normal constructor
             playlist_url = new PlaylistUrl(candidate_url,true);
             return true;
         }else{
+            playlist_url = new PlaylistUrl(" ", false);
             return false;
         }
     }
