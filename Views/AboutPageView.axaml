@@ -7,8 +7,11 @@
         x:Class="YT2ITUNES.Views.AboutPageView"
         x:DataType="vm:AboutPageViewModel"
         >
-    <StackPanel>
-        <TextBlock Text="{Binding Title}"/>
-    </StackPanel>
-
+    <Border Margin="5,5,5,5"> 
+        <StackPanel>
+            <TextBlock Text="{Binding Title}"/>
+            <TextBlock Text="{Binding Help}"/>
+            <TextBlock Text="{Binding DownloadAndForget}"/>
+        </StackPanel>
+    </Border>
 </UserControl>

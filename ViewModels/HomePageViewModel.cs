@@ -97,6 +97,7 @@ public partial class HomePageViewModel : ViewModelBase
     [ObservableProperty]
     private string _playlistSearchText = "";
 
+
     partial void OnPlaylistSearchTextChanged(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -133,6 +134,10 @@ public partial class HomePageViewModel : ViewModelBase
         {
             _sb.Append(text);
             ConsoleOutput = _sb.ToString();
+            if (ConsoleOutput.Length > 20000)
+            {
+                _sb = new StringBuilder(ConsoleOutput.Substring(10000));
+            }
         });
     }
 
@@ -270,6 +275,22 @@ public partial class HomePageViewModel : ViewModelBase
         SetAlbumArt(pl);
     }
 
+
+    [ObservableProperty]
+    private bool _confirmDelete = false;
+
+    [RelayCommand]
+    public void DeleteButtonPrompt()
+    {
+        ConfirmDelete = true;
+    }
+    
+    [RelayCommand]
+    public void CancelDeleteButtonPrompt()
+    {
+        ConfirmDelete = false;
+    }
+
     [RelayCommand]
     public async Task DeleteThisPlaylist(PlaylistViewModel plvm)
     {
@@ -343,8 +364,12 @@ public partial class HomePageViewModel : ViewModelBase
                 await Downloader.DownloadPlaylist(plm_new);
                 await AppleMusicAdder.AddToAppleMusic(plm_new);
                 await DbConnection.UpdatePlaylist(plm_new.Id, plm_new.Count, plm_new.Last_update);
-                PlaylistViewModel final_plvm = new PlaylistViewModel(await DbConnection.GetPlaylist(NewPlaylistId));
-                PlaylistViewModels.Insert(0, final_plvm);
+                var newPlaylist = await DbConnection.GetPlaylist(NewPlaylistId);
+                if (newPlaylist != null)
+                { 
+                    PlaylistViewModel final_plvm = new PlaylistViewModel(newPlaylist);
+                    PlaylistViewModels.Insert(0, final_plvm);
+                }
             }
         }
 
@@ -425,6 +450,7 @@ public partial class HomePageViewModel : ViewModelBase
         }
         catch (Exception e)
         {
+            Console.WriteLine(e.Message);
             return null;
         }
         return null;

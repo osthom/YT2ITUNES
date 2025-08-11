@@ -38,10 +38,6 @@ public partial class PlaylistViewModel : ViewModelBase
     [ObservableProperty]
     private bool _ready = false;
 
-    public PlaylistViewModel()
-    {
-
-    }
     public PlaylistViewModel(PlaylistModel pl)
     {
         Count = pl.Count;
