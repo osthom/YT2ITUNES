@@ -116,7 +116,7 @@ public class AppleMusicAdder
         int exitCode = proc.ExitCode;
         StringBuilder sb = new StringBuilder();
         sb.Append(proc.StandardError.ReadToEnd());
-        Console.WriteLine($"[ERROR CHECKING] Errors are : {proc.StandardError.ReadToEnd()}");
+        Console.WriteLine($"{proc.StandardError.ReadToEnd()}");
 
 
 

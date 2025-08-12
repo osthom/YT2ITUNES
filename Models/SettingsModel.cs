@@ -19,7 +19,7 @@ public class SettingsModel
 
     public SettingsModel()
     {
-        string JsonSettingsString = File.ReadAllText(Path.Combine("Assets", "settings.json"));
+        string JsonSettingsString = File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"Assets", "settings.json"));
 
         JsonNode? parsedJson = JsonNode.Parse(JsonSettingsString);
         if (parsedJson is JsonObject)
@@ -42,14 +42,14 @@ public class SettingsModel
         if (1 <= newRate && newRate <= 20)
         {
 
-            string JsonSettingsString = File.ReadAllText(Path.Combine("Assets", "settings.json"));
+            string JsonSettingsString = File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"Assets", "settings.json"));
             JsonNode? parsedJson = JsonNode.Parse(JsonSettingsString);
             if (parsedJson is JsonObject obj)
             {
 
                 obj["RateLimit"] = newRate;
                 var NewSettings = new JsonSerializerOptions { WriteIndented = true };
-                File.WriteAllText(Path.Combine("Assets","settings.json"), obj.ToJsonString(NewSettings));
+                File.WriteAllText(Path.Combine(AppContext.BaseDirectory,"Assets","settings.json"), obj.ToJsonString(NewSettings));
             }
         }
     }
@@ -62,13 +62,13 @@ public class SettingsModel
     {
         if (0 <= newQuality && newQuality <= 10)
         {
-            string JsonSettingsString = File.ReadAllText(Path.Combine("Assets", "settings.json"));
+            string JsonSettingsString = File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"Assets", "settings.json"));
             JsonNode? parsedJson = JsonNode.Parse(JsonSettingsString);
             if (parsedJson is JsonObject obj)
             {
                 obj["AudioQuality"] = newQuality;
                 var NewSettings = new JsonSerializerOptions { WriteIndented = true };
-                File.WriteAllText(Path.Combine("Assets","settings.json"), obj.ToJsonString(NewSettings));
+                File.WriteAllText(Path.Combine(AppContext.BaseDirectory,"Assets","settings.json"), obj.ToJsonString(NewSettings));
             }
         }
     }
@@ -78,13 +78,13 @@ public class SettingsModel
     }
     public void SetThumbnail(bool thumbnails)
     {
-            string JsonSettingsString = File.ReadAllText(Path.Combine("Assets", "settings.json"));
+            string JsonSettingsString = File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"Assets", "settings.json"));
             JsonNode? parsedJson = JsonNode.Parse(JsonSettingsString);
             if (parsedJson is JsonObject obj)
             {
                 obj["EmbedThumbnail"] = thumbnails;
                 var NewSettings = new JsonSerializerOptions { WriteIndented = true };
-                File.WriteAllText(Path.Combine("Assets","settings.json"), obj.ToJsonString(NewSettings));
+                File.WriteAllText(Path.Combine(AppContext.BaseDirectory,"Assets","settings.json"), obj.ToJsonString(NewSettings));
             }
     }
 }
