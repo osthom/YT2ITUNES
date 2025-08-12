@@ -120,9 +120,7 @@ public class DbConnection
 
         try
         {
-            Console.WriteLine("Getting Here");
             connection.Open();
-            Console.WriteLine("Getting Here Too");
 
             SqliteCommand cmd = connection.CreateCommand();
             cmd.CommandText =
@@ -383,8 +381,9 @@ public class DbConnection
     }
 
     private static string GetConnString()
-    { 
-        return $"Data Source={Path.Combine("Assets", "database.db")}";
+    {
+        string path = Path.Combine(AppContext.BaseDirectory,"Assets", "database.db");
+        return $"Data Source={path}";
     }
 
     public static void OnStartupCall()

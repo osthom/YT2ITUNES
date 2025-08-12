@@ -152,7 +152,6 @@ public class Downloader
             RedirectStandardError = true,
         };
 
-        Console.WriteLine("Starting Subprocess");
 
         var proc = Process.Start(subprocess);
         ArgumentNullException.ThrowIfNull(proc);

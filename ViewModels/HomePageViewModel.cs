@@ -86,7 +86,7 @@ public partial class HomePageViewModel : ViewModelBase
     private PlaylistViewModel? _selectedPlaylist;
 
     [ObservableProperty]
-    private Bitmap _albumArt = new Bitmap(Path.Combine("Assets", "defaultAlbumArt.png"));
+    private Bitmap _albumArt = new Bitmap(Path.Combine(AppContext.BaseDirectory,"Assets", "defaultAlbumArt.png"));
 
     //End Playlist Viewer Properties
 
@@ -327,7 +327,7 @@ public partial class HomePageViewModel : ViewModelBase
             }
             else
             {
-                AlbumArt = new Bitmap(Path.Combine("Assets", "defaultAlbumArt.png"));
+                AlbumArt = new Bitmap(Path.Combine(AppContext.BaseDirectory, "Assets", "defaultAlbumArt.png"));
             }
         }
     }
